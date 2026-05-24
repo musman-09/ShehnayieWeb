@@ -1,13 +1,22 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // 👈 add useNavigate
-import { useSelector } from "react-redux"; // 👈 add useSelector
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import shehnayieLogo from "../assets/images/shehnayieText.png";
+import { setLogout } from "../redux/authSlice";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate(); // 👈 add
-  const cartItems = useSelector((state) => state.cart.items); // 👈 add
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
+  const token = useSelector((state) => state.counter.token);
+  const role = useSelector((state) => state.counter.role);
+
+  const handleLogout = () => {
+    dispatch(setLogout());
+    navigate("/home");
+  };
 
   return (
     <nav className="bg-white border-b border-gray-200 px-6 h-20 flex items-center justify-between relative">
@@ -77,10 +86,19 @@ function Navbar() {
             Contact Us
           </Link>
         </li>
+
+        {role === "admin" && (
+          <li>
+            <Link to="/admin" className="text-yellow-500 font-medium text-sm">
+              Admin Panel
+            </Link>
+          </li>
+        )}
       </ul>
 
-      {/* Desktop Search + Cart */}
+      {/* Desktop Right Side */}
       <div className="hidden md:flex items-center gap-4">
+        {/* Search */}
         <div className="flex items-center gap-2 bg-gray-50 border border-gray-100 rounded-lg px-3 py-2">
           <svg
             width="16"
@@ -101,7 +119,7 @@ function Navbar() {
           />
         </div>
 
-        {/* Cart Icon */}
+        {/* Cart */}
         <button onClick={() => navigate("/cart")} className="relative p-2">
           🛒
           {cartItems.length > 0 && (
@@ -110,6 +128,23 @@ function Navbar() {
             </span>
           )}
         </button>
+
+        {/* Login / Logout */}
+        {token ? (
+          <button
+            onClick={handleLogout}
+            className="text-sm text-red-400 hover:text-red-600 transition"
+          >
+            Logout
+          </button>
+        ) : (
+          <button
+            onClick={() => navigate("/login")}
+            className="text-sm bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition"
+          >
+            Login
+          </button>
+        )}
       </div>
 
       {/* Hamburger Button */}
@@ -134,6 +169,7 @@ function Navbar() {
           <Link to="/home" className="text-gray-600 text-sm">
             Home
           </Link>
+
           <div>
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -161,6 +197,7 @@ function Navbar() {
               </div>
             )}
           </div>
+
           <Link to="/about" className="text-gray-600 text-sm">
             About Us
           </Link>
@@ -168,6 +205,15 @@ function Navbar() {
             Contact Us
           </Link>
 
+          {role === "admin" && (
+            <li>
+              <Link to="/admin" className="text-yellow-500 font-medium text-sm">
+                Admin Panel
+              </Link>
+            </li>
+          )}
+
+          {/* Mobile Search */}
           <div className="flex items-center gap-2 bg-gray-50 border border-gray-100 rounded-lg px-3 py-2">
             <svg
               width="16"
@@ -188,6 +234,7 @@ function Navbar() {
             />
           </div>
 
+          {/* Mobile Cart */}
           <button
             onClick={() => navigate("/cart")}
             className="relative p-2 w-fit"
@@ -199,6 +246,23 @@ function Navbar() {
               </span>
             )}
           </button>
+
+          {/* Mobile Login / Logout */}
+          {token ? (
+            <button
+              onClick={handleLogout}
+              className="text-sm text-red-400 text-left"
+            >
+              Logout
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate("/login")}
+              className="text-sm bg-yellow-500 text-white px-4 py-2 rounded-lg text-left"
+            >
+              Login
+            </button>
+          )}
         </div>
       )}
     </nav>

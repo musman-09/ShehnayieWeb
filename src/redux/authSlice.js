@@ -5,6 +5,7 @@ export const counterSlice = createSlice({
   initialState: {
     value: 0,
     token: null,
+    role: null,
   },
   reducers: {
     increment: (state) => {
@@ -19,12 +20,17 @@ export const counterSlice = createSlice({
 
     setLogin: (state, action) => {
       state.token = action.payload;
+      state.role = action.payload.role;
+    },
+    setLogout: (state) => {
+      state.token = null;
+      state.role = null;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount, setLogin } =
+export const { increment, decrement, incrementByAmount, setLogin, setLogout } =
   counterSlice.actions;
 
 export default counterSlice.reducer;

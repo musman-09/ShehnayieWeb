@@ -2,8 +2,9 @@ import React from "react";
 import Navbar from "../../Components/Navbar";
 import CategorySection from "../../Components/CategorySection";
 import shehnayieLogo from "../../assets/images/shehnayieText.png";
-import productsData from "../../data/productsData"; // 👈 import from data file
+import productsData from "../../data/productsData";
 import HeroBackground from "../../assets/images/HeroBackground.png";
+import Footer from "../../Components/Footer";
 
 // group flat array by category
 const grouped = productsData.reduce((acc, product) => {
@@ -70,6 +71,8 @@ const Home = () => {
           <CategorySection key={category} category={category} items={items} />
         ))}
       </div>
+
+      <Footer />
     </>
   );
 };

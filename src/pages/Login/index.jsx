@@ -14,9 +14,14 @@ function Login() {
   const navigate = useNavigate();
   const handleLogin = () => {
     if (email && password) {
-      dispatch(setLogin("fake-token-123"));
-      navigate("/Home");
-      console.log("Logged in!");
+      // simulate — replace with API later
+      if (email === "admin@shehnayie.com") {
+        dispatch(setLogin({ token: "fake-token-123", role: "admin" }));
+        navigate("/admin");
+      } else {
+        dispatch(setLogin({ token: "fake-token-123", role: "user" }));
+        navigate("/home");
+      }
     } else {
       console.log("Please fill in all fields");
     }
